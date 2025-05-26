@@ -10,13 +10,17 @@ void* crf_MallocSpy(size_t size) {
 }
 void crf_FreeSpy(void* ptr) {
     free(ptr);
-    allocatedPtrs.erase(ptr);
+    if (allocatedPtrs.find(ptr) != allocatedPtrs.end()) {
+        allocatedPtrs.erase(ptr);
+    }
 }
 void* crf_ReallocSpy(void* ptr, size_t size) {
     void* newPtr = realloc(ptr, size);
     if (newPtr) {
         allocatedPtrs.insert(newPtr);
-        allocatedPtrs.erase(ptr);
+        if (allocatedPtrs.find(ptr) != allocatedPtrs.end()) {
+            allocatedPtrs.erase(ptr);
+        }
     }
     return newPtr;
 }

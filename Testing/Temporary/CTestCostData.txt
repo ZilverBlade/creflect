@@ -1,5 +1,5 @@
 testSuite_NOT_BUILT 0 0
-testSuite 7 0
+testSuite 9 0.00526622
 HelloTest.BasicAssertions 2 0.0288719
 creflect.TestCreateDecoratorNullMalloc 15 0.00131744
 creflect.TestCreateDecoratorOddMalloc 15 0.00140003
@@ -17,39 +17,56 @@ creflect.TestMemberTypeFloatCorrectness 7 0.00279619
 creflect.TestMemberTypeDoubleCorrectness 7 0.00296624
 creflect.TestMemberTypePointerCorrectness 7 0.00349197
 creflect.TestInvalidMemberIndex 3 0.00679517
-AllocationErrHandler.TestCreateDecoratorNullMalloc 6 0.00339043
-AllocationErrHandler.TestCreateDecoratorOddMalloc 6 0.00307332
-DecoratorLayout.TestDecoratorSize 1 0
-DecoratorLayout.TestNullMemberString 2 0
-DecoratorLayout.TestEmptyMemberString 2 0
-DecoratorLayout.TestBadMemberString 1 0
-DecoratorLayout.TestBadMixMemberString 1 0
-DecoratorLayout.TestAllGoodMemberString 1 0
-DecoratorLayout.TestMemberTypeCharCorrectness 1 0
-DecoratorLayout.TestMemberTypeShortCorrectness 1 0
-DecoratorLayout.TestMemberTypeIntCorrectness 2 0
-DecoratorLayout.TestMemberTypeLongCorrectness 1 0
-DecoratorLayout.TestMemberTypeFloatCorrectness 1 0
-DecoratorLayout.TestMemberTypeDoubleCorrectness 1 0
-DecoratorLayout.TestMemberTypePointerCorrectness 1 0
-DecoratorLayout.TestInvalidMemberIndex 1 0
-DecoratorMemberNames.TestMemberNameCorrectIndices 0 0
-DecoratorMemberNames.TestMemberInvalidIndices 0 0
+AllocationErrHandler.TestCreateDecoratorNullMalloc 12 0.00187045
+AllocationErrHandler.TestCreateDecoratorOddMalloc 12 0.00174163
+DecoratorLayout.TestDecoratorSize 4 0.00575412
+DecoratorLayout.TestNullMemberString 5 0.0047831
+DecoratorLayout.TestEmptyMemberString 5 0.00410042
+DecoratorLayout.TestBadMemberString 4 0.00599618
+DecoratorLayout.TestBadMixMemberString 4 0.0238253
+DecoratorLayout.TestAllGoodMemberString 4 0.0347982
+DecoratorLayout.TestMemberTypeCharCorrectness 4 0.060802
+DecoratorLayout.TestMemberTypeShortCorrectness 4 0.038584
+DecoratorLayout.TestMemberTypeIntCorrectness 5 0.0145633
+DecoratorLayout.TestMemberTypeLongCorrectness 4 0.0145996
+DecoratorLayout.TestMemberTypeFloatCorrectness 4 0.0110302
+DecoratorLayout.TestMemberTypeDoubleCorrectness 4 0.00758495
+DecoratorLayout.TestMemberTypePointerCorrectness 4 0.00669343
+DecoratorLayout.TestInvalidMemberIndex 4 0.00727083
+DecoratorMemberNames.TestMemberNameCorrectIndices 1 0.023778
+DecoratorMemberNames.TestMemberInvalidIndices 1 0.035412
+DecoratorMemberNames.TestMemberNameSingleName 2 0.0144941
+DecoratorMemberNames.TestMemberNameTwoNames 1 0.0249083
+DecoratorMemberNames.TestMemberNameInvalidDuplicate 1 0.0217195
+AllocationErrHandler.CreateDecoratorNullMalloc 11 0.00193255
+AllocationErrHandler.CreateDecoratorOddMalloc 11 0.00180272
+DecoratorLayout.DecoratorSize 11 0.00182073
+DecoratorLayout.NullMemberString 11 0.00179524
+DecoratorLayout.EmptyMemberString 11 0.00199548
+DecoratorLayout.BadMemberString 11 0.00199287
+DecoratorLayout.BadMixMemberString 11 0.00212821
+DecoratorLayout.AllGoodMemberString 11 0.00184865
+DecoratorLayout.MemberTypeCharCorrectness 11 0.00182202
+DecoratorLayout.MemberTypeShortCorrectness 11 0.00193459
+DecoratorLayout.MemberTypeIntCorrectness 11 0.00188435
+DecoratorLayout.MemberTypeLongCorrectness 11 0.00178374
+DecoratorLayout.MemberTypeFloatCorrectness 11 0.00181287
+DecoratorLayout.MemberTypeDoubleCorrectness 11 0.00178335
+DecoratorLayout.MemberTypePointerCorrectness 11 0.00178501
+DecoratorLayout.InvalidMemberIndex 11 0.00204587
+DecoratorMemberNames.SingleName 8 0.00256733
+DecoratorMemberNames.TwoNames 8 0.00234172
+DecoratorMemberNames.InvalidDuplicate 6 0.00308688
+DecoratorMemberNames.CorrectIndices 8 0.00240377
+DecoratorMemberNames.InvalidIndices 8 0.00593634
+MemberNameValidator.InvalidEmptyName 5 0.00413896
+MemberNameValidator.InvalidNullName 10 0.00189836
+MemberNameValidator.InvalidSpacedName 10 0.00186412
+MemberNameValidator.InvalidLeadingNumberName 9 0.00241498
+MemberNameValidator.ValidTrailingNumberName 1 0
+MemberNameValidator.ValidUnderscoreName 4 0.00555933
+MemberNameValidator.ValidMixStressName 4 0.00514685
+MemberNameValidator.InvalidHyphenName 8 0.00236335
+MemberNameValidator.ValidTrailingNumberNameMin 3 0.00748663
+MemberNameValidator.ValidTrailingNumberNameMax 3 0.0122489
 ---
-DecoratorLayout.TestDecoratorSize
-DecoratorLayout.TestNullMemberString
-DecoratorLayout.TestEmptyMemberString
-DecoratorLayout.TestBadMemberString
-DecoratorLayout.TestBadMixMemberString
-DecoratorLayout.TestAllGoodMemberString
-DecoratorLayout.TestMemberTypeCharCorrectness
-DecoratorLayout.TestMemberTypeShortCorrectness
-DecoratorLayout.TestMemberTypeIntCorrectness
-DecoratorLayout.TestMemberTypeLongCorrectness
-DecoratorLayout.TestMemberTypeFloatCorrectness
-DecoratorLayout.TestMemberTypeDoubleCorrectness
-DecoratorLayout.TestMemberTypePointerCorrectness
-DecoratorLayout.TestInvalidMemberIndex
-DecoratorMemberNames.TestMemberNameCorrectIndices
-DecoratorMemberNames.TestMemberInvalidIndices
-testSuite

@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include "spies.hpp"
 
-TEST(DecoratorLayout, TestDecoratorSize) {
+TEST(DecoratorLayout, DecoratorSize) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -23,7 +23,7 @@ TEST(DecoratorLayout, TestDecoratorSize) {
     crf_FreeContextAndVerify(ctx);
 }
 
-TEST(DecoratorLayout, TestNullMemberString) {
+TEST(DecoratorLayout, NullMemberString) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -38,7 +38,7 @@ TEST(DecoratorLayout, TestNullMemberString) {
     crf_FreeContextAndVerify(ctx);
 }
 
-TEST(DecoratorLayout, TestEmptyMemberString) {
+TEST(DecoratorLayout, EmptyMemberString) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -54,7 +54,7 @@ TEST(DecoratorLayout, TestEmptyMemberString) {
 }
 
 
-TEST(DecoratorLayout, TestBadMemberString) {
+TEST(DecoratorLayout, BadMemberString) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -68,7 +68,7 @@ TEST(DecoratorLayout, TestBadMemberString) {
 }
 
 
-TEST(DecoratorLayout, TestBadMixMemberString) {
+TEST(DecoratorLayout, BadMixMemberString) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -81,7 +81,7 @@ TEST(DecoratorLayout, TestBadMixMemberString) {
     crf_FreeContextAndVerify(ctx);
 }
 
-TEST(DecoratorLayout, TestAllGoodMemberString) {
+TEST(DecoratorLayout, AllGoodMemberString) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -95,7 +95,7 @@ TEST(DecoratorLayout, TestAllGoodMemberString) {
     crf_FreeContextAndVerify(ctx);
 }
 
-TEST(DecoratorLayout, TestMemberTypeCharCorrectness) {
+TEST(DecoratorLayout, MemberTypeCharCorrectness) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -110,7 +110,7 @@ TEST(DecoratorLayout, TestMemberTypeCharCorrectness) {
     crf_FreeContextAndVerify(ctx);
 }
 
-TEST(DecoratorLayout, TestMemberTypeShortCorrectness) {
+TEST(DecoratorLayout, MemberTypeShortCorrectness) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -126,7 +126,7 @@ TEST(DecoratorLayout, TestMemberTypeShortCorrectness) {
 }
 
 
-TEST(DecoratorLayout, TestMemberTypeIntCorrectness) {
+TEST(DecoratorLayout, MemberTypeIntCorrectness) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -141,7 +141,7 @@ TEST(DecoratorLayout, TestMemberTypeIntCorrectness) {
     crf_FreeContextAndVerify(ctx);
 }
 
-TEST(DecoratorLayout, TestMemberTypeLongCorrectness) {
+TEST(DecoratorLayout, MemberTypeLongCorrectness) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -156,7 +156,7 @@ TEST(DecoratorLayout, TestMemberTypeLongCorrectness) {
     crf_FreeContextAndVerify(ctx);
 }
 
-TEST(DecoratorLayout, TestMemberTypeFloatCorrectness) {
+TEST(DecoratorLayout, MemberTypeFloatCorrectness) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -171,7 +171,7 @@ TEST(DecoratorLayout, TestMemberTypeFloatCorrectness) {
     crf_FreeContextAndVerify(ctx);
 }
 
-TEST(DecoratorLayout, TestMemberTypeDoubleCorrectness) {
+TEST(DecoratorLayout, MemberTypeDoubleCorrectness) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -186,7 +186,7 @@ TEST(DecoratorLayout, TestMemberTypeDoubleCorrectness) {
     crf_FreeContextAndVerify(ctx);
 }
 
-TEST(DecoratorLayout, TestMemberTypePointerCorrectness) {
+TEST(DecoratorLayout, MemberTypePointerCorrectness) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;
@@ -202,7 +202,7 @@ TEST(DecoratorLayout, TestMemberTypePointerCorrectness) {
 }
 
 
-TEST(DecoratorLayout, TestInvalidMemberIndex) {
+TEST(DecoratorLayout, InvalidMemberIndex) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
 
     crf_decorator_create_info createInfo;

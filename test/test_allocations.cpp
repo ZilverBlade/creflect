@@ -19,7 +19,7 @@ crf_allocator_table crf_GetRussianRouletteMallocTable() {
     return nullAllocator;
 }
 
-TEST(AllocationErrHandler, TestCreateDecoratorNullMalloc) {
+TEST(AllocationErrHandler, CreateDecoratorNullMalloc) {
     crf_context ctx = crf_create_context();
     crf_allocator_table table = crf_GetNullMallocTable();
     crf_context_set_allocator(ctx, &table);
@@ -35,7 +35,7 @@ TEST(AllocationErrHandler, TestCreateDecoratorNullMalloc) {
 }
 
 
-TEST(AllocationErrHandler, TestCreateDecoratorOddMalloc) {
+TEST(AllocationErrHandler, CreateDecoratorOddMalloc) {
     crf_context ctx = crf_create_context();
     crf_allocator_table table = crf_GetNullMallocTable();
     crf_context_set_allocator(ctx, &table);
