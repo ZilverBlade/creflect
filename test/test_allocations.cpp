@@ -1,4 +1,4 @@
-#include "stubs.h"
+#include "stubs.hpp"
 #include <decorator.h>
 #include <gtest/gtest.h>
 #include <cstdlib>
@@ -19,35 +19,35 @@ crf_allocator_table crf_GetRussianRouletteMallocTable() {
     return nullAllocator;
 }
 
-TEST(creflect, TestCreateDecoratorNullMalloc) {
-    crf_context ctx = crf_context_create();
+TEST(AllocationErrHandler, TestCreateDecoratorNullMalloc) {
+    crf_context ctx = crf_create_context();
     crf_allocator_table table = crf_GetNullMallocTable();
     crf_context_set_allocator(ctx, &table);
 
     crf_decorator_create_info createInfo;
-    createInfo.pczMemberLayout = "iiii";
-    createInfo.ppMemberNames = NULL;
+    createInfo.szMemberLayout = "iiii";
+    createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
     EXPECT_FALSE(decorator);
 
-    crf_context_free(ctx);
+    crf_free_context(ctx);
 }
 
 
-TEST(creflect, TestCreateDecoratorOddMalloc) {
-    crf_context ctx = crf_context_create();
+TEST(AllocationErrHandler, TestCreateDecoratorOddMalloc) {
+    crf_context ctx = crf_create_context();
     crf_allocator_table table = crf_GetNullMallocTable();
     crf_context_set_allocator(ctx, &table);
 
     crf_decorator_create_info createInfo;
-    createInfo.pczMemberLayout = "iiii";
-    createInfo.ppMemberNames = NULL;
+    createInfo.szMemberLayout = "iiii";
+    createInfo.pszMemberNames = NULL;
 
     // needs to malloc for BOTH the decorator and the member types
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
     EXPECT_FALSE(decorator);
 
-    crf_context_free(ctx);
+    crf_free_context(ctx);
 }

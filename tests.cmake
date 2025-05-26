@@ -45,7 +45,7 @@ target_include_directories("testSuite" PRIVATE
 
 if (WIN32)
 set_property(TARGET "testSuite" 
-PROPERTY MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug> 
+PROPERTY MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>DLL
 )
 endif(WIN32)
 

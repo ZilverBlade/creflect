@@ -7,7 +7,7 @@ typedef struct crf_context_t {
     crf_allocator_table allocator;
 } crf_context_t;
 
-crf_context crf_context_create() {
+crf_context crf_create_context() {
     crf_context ctx = (crf_context)malloc(sizeof(crf_context_t));
     if (!ctx) return NULL;
     ctx->allocator.pfnMalloc = malloc;
@@ -16,7 +16,7 @@ crf_context crf_context_create() {
     return ctx;
 }
 
-void crf_context_free(crf_context ctx) {
+void crf_free_context(crf_context ctx) {
     assert(ctx && "dont free a null struct!");
     free(ctx);
 }

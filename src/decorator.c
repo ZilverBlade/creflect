@@ -5,10 +5,10 @@
 #include <string.h>
 
 typedef struct crf_decorator_t {
-    const char** ppczMemberNames;
+    const char** pszMemberNames;
     crf_member_type* pMemberTypes;
-    size_t szMemberCount;
-    size_t szStructTotal;
+    size_t cMemberCount;
+    size_t cbStructTotal;
 } crf_decorator_t;
 
 size_t crf_member_type_get_size(const crf_member_type member) {
@@ -32,22 +32,40 @@ crf_decorator crf_create_decorator(crf_context ctx, const crf_decorator_create_i
     crf_decorator result = (crf_decorator)allocator->pfnMalloc(sizeof(crf_decorator_t));
     if (!result) return NULL;
 
-    result->szStructTotal = 0;
-    result->szMemberCount = layout->pczMemberLayout ? strlen(layout->pczMemberLayout) : 0;
-    if (result->szMemberCount > 0) {
-        result->pMemberTypes = (crf_member_type*)allocator->pfnMalloc(result->szMemberCount * sizeof(crf_member_type));
+    result->cbStructTotal = 0;
+    result->cMemberCount = layout->szMemberLayout ? strlen(layout->szMemberLayout) : 0;
+    if (result->cMemberCount > 0) {
+        result->pMemberTypes = (crf_member_type*)allocator->pfnMalloc(result->cMemberCount * sizeof(crf_member_type));
         if (!result->pMemberTypes) goto fail_return;
-        for (size_t i = 0; i < result->szMemberCount; ++i) {
-            result->pMemberTypes[i] = (crf_member_type)layout->pczMemberLayout[i];
+        if (layout->pszMemberNames) {
+            result->pszMemberNames = (const char**)allocator->pfnMalloc(result->cMemberCount * sizeof(const char*));
+            if (!result->pszMemberNames) goto fail_return;
+            memset(result->pszMemberNames, 0, result->cMemberCount * sizeof(const char*));
+            for (size_t i = 0; i < result->cMemberCount; ++i) {
+                size_t clearSize = strlen(layout->pszMemberNames[i])+1;
+                result->pszMemberNames[i] = (char*)allocator->pfnMalloc(clearSize);
+                if (!result->pszMemberNames[i]) goto fail_return;
+                memset(result->pszMemberNames[i], 0, clearSize);
+
+                for (size_t j = 0; j < i; ++j) {
+                    if (strcmp(result->pszMemberNames[j], layout->pszMemberNames[i]) != 0) { // don't repeat member names
+                        goto fail_return;
+                    }
+                }
+                strncpy(result->pszMemberNames[i], layout->pszMemberNames[i], clearSize - 1);
+            }
+        }
+        for (size_t i = 0; i < result->cMemberCount; ++i) {
+            result->pMemberTypes[i] = (crf_member_type)layout->szMemberLayout[i];
             size_t memberSz = crf_member_type_get_size(result->pMemberTypes[i]);
             if (memberSz == 0) {
                 goto fail_return;
             }
-            result->szStructTotal += (size_t)memberSz;
+            result->cbStructTotal += (size_t)memberSz;
         }
     } else {
         result->pMemberTypes = NULL;
-        result->ppczMemberNames = NULL;
+        result->pszMemberNames = NULL;
     }
 
     return result;
@@ -58,23 +76,28 @@ fail_return:
 }
 
 void crf_free_decorator(crf_context ctx, crf_decorator decorator) {
-    assert(decorator && "cannot free a null struct!");
-    if (decorator->pMemberTypes) {
-        crf_context_get_allocator(ctx)->pfnFree(decorator->pMemberTypes);
+    if (!decorator) return;
+    const crf_allocator_table* allocator = crf_context_get_allocator(ctx);
+    if (decorator->pszMemberNames) {
+        for (size_t i = 0; i < decorator->cMemberCount; ++i) {
+            allocator->pfnFree(decorator->pszMemberNames[i]);
+        }
     }
+    allocator->pfnFree(decorator->pMemberTypes);
+    allocator->pfnFree(decorator->pszMemberNames);
     free(decorator);
 }
 
 crf_member_type crf_decorator_get_member_type(crf_decorator decorator, size_t index) {
     assert(decorator && "dont pass empty decorator ");
-    if (index >= decorator->szMemberCount) return CRF_MEMBER_INVALID;
+    if (index >= decorator->cMemberCount) return CRF_MEMBER_INVALID;
     return decorator->pMemberTypes[index];
 }
 size_t crf_decorator_get_member_index(crf_decorator decorator, const char* pczMemberName) {
     assert(decorator && "dont pass empty decorator ");
-    if (!pczMemberName || !decorator->ppczMemberNames) return CRF_INVALID_INDEX;
-    for (size_t i = 0; i < decorator->szMemberCount; ++i) {
-        if (strcmp(decorator->ppczMemberNames[i], pczMemberName) == 0) {
+    if (!pczMemberName || !decorator->pszMemberNames) return CRF_INVALID_INDEX;
+    for (size_t i = 0; i < decorator->cMemberCount; ++i) {
+        if (strcmp(decorator->pszMemberNames[i], pczMemberName) == 0) {
             return i;
         }
     }
@@ -82,9 +105,9 @@ size_t crf_decorator_get_member_index(crf_decorator decorator, const char* pczMe
 }
 size_t crf_decorator_get_num_members(crf_decorator decorator) {
     assert(decorator && "dont pass empty decorator ");
-    return decorator->szMemberCount;
+    return decorator->cMemberCount;
 }
 size_t crf_decorator_get_size(crf_decorator decorator) {
     assert(decorator && "dont pass empty decorator ");
-    return decorator->szStructTotal;
+    return decorator->cbStructTotal;
 }

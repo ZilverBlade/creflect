@@ -34,8 +34,8 @@ typedef const char* crf_member_layout;
 typedef struct crf_decorator_t* crf_decorator;
 
 typedef struct crf_decorator_create_info {
-    crf_member_layout pczMemberLayout;
-    const char** ppMemberNames;
+    crf_member_layout szMemberLayout;
+    const char* const* pszMemberNames;
 } crf_decorator_create_info;
 
 size_t crf_member_type_get_size(const crf_member_type member);

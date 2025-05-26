@@ -1,5 +1,5 @@
 testSuite_NOT_BUILT 0 0
-testSuite 7 0.00272559
+testSuite 7 0
 HelloTest.BasicAssertions 2 0.0288719
 creflect.TestCreateDecoratorNullMalloc 15 0.00131744
 creflect.TestCreateDecoratorOddMalloc 15 0.00140003
@@ -17,4 +17,39 @@ creflect.TestMemberTypeFloatCorrectness 7 0.00279619
 creflect.TestMemberTypeDoubleCorrectness 7 0.00296624
 creflect.TestMemberTypePointerCorrectness 7 0.00349197
 creflect.TestInvalidMemberIndex 3 0.00679517
+AllocationErrHandler.TestCreateDecoratorNullMalloc 6 0.00339043
+AllocationErrHandler.TestCreateDecoratorOddMalloc 6 0.00307332
+DecoratorLayout.TestDecoratorSize 1 0
+DecoratorLayout.TestNullMemberString 2 0
+DecoratorLayout.TestEmptyMemberString 2 0
+DecoratorLayout.TestBadMemberString 1 0
+DecoratorLayout.TestBadMixMemberString 1 0
+DecoratorLayout.TestAllGoodMemberString 1 0
+DecoratorLayout.TestMemberTypeCharCorrectness 1 0
+DecoratorLayout.TestMemberTypeShortCorrectness 1 0
+DecoratorLayout.TestMemberTypeIntCorrectness 2 0
+DecoratorLayout.TestMemberTypeLongCorrectness 1 0
+DecoratorLayout.TestMemberTypeFloatCorrectness 1 0
+DecoratorLayout.TestMemberTypeDoubleCorrectness 1 0
+DecoratorLayout.TestMemberTypePointerCorrectness 1 0
+DecoratorLayout.TestInvalidMemberIndex 1 0
+DecoratorMemberNames.TestMemberNameCorrectIndices 0 0
+DecoratorMemberNames.TestMemberInvalidIndices 0 0
 ---
+DecoratorLayout.TestDecoratorSize
+DecoratorLayout.TestNullMemberString
+DecoratorLayout.TestEmptyMemberString
+DecoratorLayout.TestBadMemberString
+DecoratorLayout.TestBadMixMemberString
+DecoratorLayout.TestAllGoodMemberString
+DecoratorLayout.TestMemberTypeCharCorrectness
+DecoratorLayout.TestMemberTypeShortCorrectness
+DecoratorLayout.TestMemberTypeIntCorrectness
+DecoratorLayout.TestMemberTypeLongCorrectness
+DecoratorLayout.TestMemberTypeFloatCorrectness
+DecoratorLayout.TestMemberTypeDoubleCorrectness
+DecoratorLayout.TestMemberTypePointerCorrectness
+DecoratorLayout.TestInvalidMemberIndex
+DecoratorMemberNames.TestMemberNameCorrectIndices
+DecoratorMemberNames.TestMemberInvalidIndices
+testSuite
