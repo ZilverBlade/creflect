@@ -1,15 +1,10 @@
 #ifndef CREFLECT_CONTEXT_H
 #define CREFLECT_CONTEXT_H
+#include "defs.h"
 #include "allocator.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#define CRF_INVALID_INDEX (size_t)(-1)
-typedef enum crf_bool {
-    CRF_FALSE = 0,
-    CRF_TRUE = 1
-} crf_bool;
 
 typedef struct crf_context_t* crf_context;
 

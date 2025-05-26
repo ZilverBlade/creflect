@@ -3,8 +3,17 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include "decorator.h"
+
+typedef struct crf_reflection_list_entry {
+    const char* szStructName;
+    crf_decorator decorator;
+    crf_reflection_list_entry* next;
+} crf_reflection_list_entry;
+
 typedef struct crf_context_t {
     crf_allocator_table allocator;
+    crf_reflection_list_entry* pReflectionChain;
 } crf_context_t;
 
 crf_context crf_create_context() {
@@ -13,6 +22,7 @@ crf_context crf_create_context() {
     ctx->allocator.pfnMalloc = malloc;
     ctx->allocator.pfnRealloc = realloc;
     ctx->allocator.pfnFree = free;
+    ctx->pReflectionChain = NULL;
     return ctx;
 }
 

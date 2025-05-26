@@ -1,5 +1,5 @@
 #include "stubs.hpp"
-#include <decorator.h>
+#include <creflect/decorator.h>
 #include <gtest/gtest.h>
 #include <cstdlib>
 
@@ -37,7 +37,7 @@ TEST(AllocationErrHandler, CreateDecoratorNullMalloc) {
 
 TEST(AllocationErrHandler, CreateDecoratorOddMalloc) {
     crf_context ctx = crf_create_context();
-    crf_allocator_table table = crf_GetNullMallocTable();
+    crf_allocator_table table = crf_GetRussianRouletteMallocTable();
     crf_context_set_allocator(ctx, &table);
 
     crf_decorator_create_info createInfo;
