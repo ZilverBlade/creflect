@@ -28,26 +28,26 @@ crf_decorator crf_create_decorator(crf_context ctx, const crf_decorator_create_i
 
     const crf_allocator_table* allocator = crf_context_get_allocator(ctx);
 
-    crf_decorator retVal = (crf_decorator)allocator->pfnMalloc(sizeof(crf_decorator_t));
-    if (!retVal) return NULL;
+    crf_decorator result = (crf_decorator)allocator->pfnMalloc(sizeof(crf_decorator_t));
+    if (!result) return NULL;
 
-    retVal->szStructTotal = 0;
-    retVal->szMemberCount = strlen(layout->pczMemberLayout);
-    retVal->pMemberTypes = (crf_member_type*)allocator->pfnMalloc(retVal->szMemberCount * sizeof(crf_member_type));
-    if (!retVal->pMemberTypes) goto fail_return;
+    result->szStructTotal = 0;
+    result->szMemberCount = strlen(layout->pczMemberLayout);
+    result->pMemberTypes = (crf_member_type*)allocator->pfnMalloc(result->szMemberCount * sizeof(crf_member_type));
+    if (!result->pMemberTypes) goto fail_return;
 
-    for (int i = 0; i < retVal->szMemberCount; ++i) {
-        retVal->pMemberTypes[i] = (crf_member_type)layout->pczMemberLayout[i];
-        int memberSz = crf_member_type_get_size(retVal->pMemberTypes[i]);
+    for (int i = 0; i < result->szMemberCount; ++i) {
+        result->pMemberTypes[i] = (crf_member_type)layout->pczMemberLayout[i];
+        int memberSz = crf_member_type_get_size(result->pMemberTypes[i]);
         if (memberSz == 0) {
             goto fail_return;
         }
-        retVal->szStructTotal += (size_t)memberSz;
+        result->szStructTotal += (size_t)memberSz;
     }
-    return retVal;
+    return result;
 
 fail_return:
-    crf_free_decorator(ctx, retVal);
+    crf_free_decorator(ctx, result);
     return NULL;
 }
 
