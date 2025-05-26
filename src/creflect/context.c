@@ -8,12 +8,12 @@
 typedef struct crf_reflection_list_entry {
     const char* szStructName;
     crf_decorator decorator;
-    crf_reflection_list_entry* next;
+    struct crf_reflection_list_entry* next;
 } crf_reflection_list_entry;
 
 typedef struct crf_context_t {
     crf_allocator_table allocator;
-    crf_reflection_list_entry* pReflectionChain;
+    struct crf_reflection_list_entry* pReflectionChain;
 } crf_context_t;
 
 crf_context crf_create_context() {

@@ -5,7 +5,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef enum crf_member_type {
+typedef enum crf_member_type_t {
     CRF_MEMBER_INVALID = '\0',
 
     CRF_MEMBER_CHAR = 'c',
@@ -16,9 +16,10 @@ typedef enum crf_member_type {
     CRF_MEMBER_DOUBLE = 'd',
     CRF_MEMBER_POINTER = 'p'
 
-} crf_member_type;
+} crf_member_type_t;
+typedef char crf_member_type;
 
-typedef enum crf_member_size {
+typedef enum crf_member_size_t {
     CRF_MEMBER_SZ_CHAR = 1,
     CRF_MEMBER_SZ_SHORT = 2,
     CRF_MEMBER_SZ_INTEGER = 4,
@@ -27,7 +28,7 @@ typedef enum crf_member_size {
     CRF_MEMBER_SZ_DOUBLE = 8,
 
     CRF_MEMBER_SZ_POINTER = sizeof(void*)
-} crf_member_size;
+} crf_member_size_t;
 
 typedef const char* crf_member_layout;
 
