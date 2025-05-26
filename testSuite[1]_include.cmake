@@ -1,0 +1,5 @@
+if(EXISTS "D:/Directories/Documents/Visual Studio 2019/Projects/creflect/testSuite[1]_tests.cmake")
+  include("D:/Directories/Documents/Visual Studio 2019/Projects/creflect/testSuite[1]_tests.cmake")
+else()
+  add_test(testSuite_NOT_BUILT testSuite_NOT_BUILT)
+endif()

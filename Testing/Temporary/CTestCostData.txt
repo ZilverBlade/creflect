@@ -1,0 +1,20 @@
+testSuite_NOT_BUILT 0 0
+testSuite 7 0.00272559
+HelloTest.BasicAssertions 2 0.0288719
+creflect.TestCreateDecoratorNullMalloc 15 0.00131744
+creflect.TestCreateDecoratorOddMalloc 15 0.00140003
+creflect.TestDecoratorSize 14 0.00163754
+creflect.TestNullMemberString 2 0.0113093
+creflect.TestEmptyMemberString 5 0.00411632
+creflect.TestBadMemberString 7 0.00294744
+creflect.TestBadMixMemberString 7 0.00299134
+creflect.TestAllGoodMemberString 7 0.00290833
+creflect.TestMemberTypeCharCorrectness 7 0.0031911
+creflect.TestMemberTypeShortCorrectness 7 0.00276759
+creflect.TestMemberTypeIntCorrectness 7 0.00279363
+creflect.TestMemberTypeLongCorrectness 7 0.00289754
+creflect.TestMemberTypeFloatCorrectness 7 0.00279619
+creflect.TestMemberTypeDoubleCorrectness 7 0.00296624
+creflect.TestMemberTypePointerCorrectness 7 0.00349197
+creflect.TestInvalidMemberIndex 3 0.00679517
+---

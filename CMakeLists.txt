@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.16)
+﻿cmake_minimum_required(VERSION 3.14)
 if (WIN32)
 set(CMAKE_GENERATOR_PLATFORM x64)
 endif (WIN32)
@@ -43,6 +43,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "")
 
 if(WIN32)
     add_compile_options(
+      $<$<COMPILE_LANGUAGE:CXX>:/EHsc> # enable exceptions
       "/MP" # multi threaded compile
       "$<$<CONFIG:Debug>:/ZI>"
       "$<$<CONFIG:Debug>:/JMC>"
@@ -54,7 +55,7 @@ add_compile_options(
   $<$<COMPILE_LANGUAGE:C>:-m64>
   $<$<COMPILE_LANGUAGE:C>:-std=c99>
   $<$<COMPILE_LANGUAGE:CXX>:-m64>
-  $<$<COMPILE_LANGUAGE:CXX>:-std=c++14>
+  $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>
   $<$<AND:$<CONFIG:Debug>,$<COMPILE_LANGUAGE:C>>:-g>
   $<$<AND:$<CONFIG:Debug>,$<COMPILE_LANGUAGE:CXX>>:-g>
   $<$<AND:$<CONFIG:Release>,$<COMPILE_LANGUAGE:C>>:-O3>

@@ -2,16 +2,20 @@
 #define CREFLECT_STRUCT_LAYOUT_H
 #include "context.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 typedef enum crf_member_type {
+    CRF_MEMBER_INVALID = '\0',
+
     CRF_MEMBER_CHAR = 'c',
     CRF_MEMBER_SHORT = 's',
     CRF_MEMBER_INTEGER = 'i',
     CRF_MEMBER_LONG = 'l',
     CRF_MEMBER_FLOAT = 'f',
     CRF_MEMBER_DOUBLE = 'd',
-    CRF_MEMBER_POINTER = 'p',
+    CRF_MEMBER_POINTER = 'p'
 
-    CRF_MAX_VAL = 0xFF
 } crf_member_type;
 
 typedef enum crf_member_size {
@@ -34,9 +38,17 @@ typedef struct crf_decorator_create_info {
     const char** ppMemberNames;
 } crf_decorator_create_info;
 
-int crf_member_type_get_size(const crf_member_type member);
+size_t crf_member_type_get_size(const crf_member_type member);
 
 crf_decorator crf_create_decorator(crf_context ctx, const crf_decorator_create_info* layout);
 void crf_free_decorator(crf_context ctx, crf_decorator decorator);
 
+crf_member_type crf_decorator_get_member_type(crf_decorator decorator, size_t index);
+size_t crf_decorator_get_member_index(crf_decorator decorator, const char* pczMemberName);
+size_t crf_decorator_get_num_members(crf_decorator decorator);
+size_t crf_decorator_get_size(crf_decorator decorator);
+
+#ifdef __cplusplus
+}
+#endif
 #endif

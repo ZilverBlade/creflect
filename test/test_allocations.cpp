@@ -1,7 +1,7 @@
-#include "decorator.h"
 #include "stubs.h"
-#include <stdio.h>
-#include <assert.h>
+#include <decorator.h>
+#include <gtest/gtest.h>
+#include <cstdlib>
 
 crf_allocator_table crf_GetNullMallocTable() {
     crf_allocator_table nullAllocator;
@@ -19,8 +19,7 @@ crf_allocator_table crf_GetRussianRouletteMallocTable() {
     return nullAllocator;
 }
 
-
-static void crf_TestCreateDecoratorNullMalloc() {
+TEST(creflect, TestCreateDecoratorNullMalloc) {
     crf_context ctx = crf_context_create();
     crf_allocator_table table = crf_GetNullMallocTable();
     crf_context_set_allocator(ctx, &table);
@@ -30,15 +29,13 @@ static void crf_TestCreateDecoratorNullMalloc() {
     createInfo.ppMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    assert(!decorator);
+    EXPECT_FALSE(decorator);
 
     crf_context_free(ctx);
-
-    printf("Passed %s!\n", __FUNCTION__);
 }
 
 
-static void crf_TestCreateDecoratorOddMalloc() {
+TEST(creflect, TestCreateDecoratorOddMalloc) {
     crf_context ctx = crf_context_create();
     crf_allocator_table table = crf_GetNullMallocTable();
     crf_context_set_allocator(ctx, &table);
@@ -50,9 +47,7 @@ static void crf_TestCreateDecoratorOddMalloc() {
     // needs to malloc for BOTH the decorator and the member types
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    assert(!decorator);
+    EXPECT_FALSE(decorator);
 
     crf_context_free(ctx);
-
-    printf("Passed %s!\n", __FUNCTION__);
 }
