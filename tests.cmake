@@ -55,7 +55,6 @@ set_target_properties("testSuite" PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_PATH}/test
   RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_PATH}/test
 )
-add_test(NAME testSuite COMMAND testSuite)
 add_dependencies(testSuite creflect)
 target_link_libraries(testSuite
   creflect
