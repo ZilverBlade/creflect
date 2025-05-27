@@ -2,7 +2,7 @@
 enable_testing()
 set(SH_SRC "${CMAKE_SOURCE_DIR}/test")
 file(GLOB_RECURSE ENDF6_SRC
-      "${SH_SRC}/*.h"
+      "${SH_SRC}/*.hpp"
       "${SH_SRC}/*.cpp")
       
 add_executable("testSuite" ${ENDF6_SRC})
