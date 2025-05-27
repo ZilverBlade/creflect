@@ -33,3 +33,4 @@ set_target_properties("creflect" PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_PATH}
   RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_PATH}
 )
+target_compile_definitions(creflect PRIVATE creflect_src)

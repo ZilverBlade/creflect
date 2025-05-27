@@ -1,5 +1,5 @@
 #include <creflect/decorator.h>
-#include <gtest/gtest.h>
+#include "util.hpp"
 #include "spies.hpp"
 #include <vector>
 
@@ -14,7 +14,8 @@ TEST(DecoratorMemberNames, SingleName) {
     createInfo.szMemberLayout = "p";
     createInfo.pszMemberNames = names.data();
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
 
     EXPECT_EQ(crf_decorator_get_num_members(decorator), 1);
 
@@ -33,7 +34,8 @@ TEST(DecoratorMemberNames, TwoNames) {
     createInfo.szMemberLayout = "pp";
     createInfo.pszMemberNames = names.data();
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
 
     EXPECT_EQ(crf_decorator_get_num_members(decorator), 2);
 
@@ -52,7 +54,8 @@ TEST(DecoratorMemberNames, InvalidDuplicate) {
     createInfo.szMemberLayout = "pp";
     createInfo.pszMemberNames = names.data();
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-    EXPECT_FALSE(decorator);
+    EXPECT_EQ(crf_context_get_last_error(ctx), CRF_EC_INVALID_ARG);
+    EXPECT_NULL(decorator);
 
     crf_FreeContextAndVerify(ctx);
 }
@@ -69,7 +72,8 @@ TEST(DecoratorMemberNames, CorrectIndices) {
     createInfo.szMemberLayout = "pip";
     createInfo.pszMemberNames = names.data();
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
 
     EXPECT_EQ(crf_decorator_get_num_members(decorator), 3);
     EXPECT_EQ(crf_decorator_get_member_index(decorator, names[0]), 0);
@@ -93,7 +97,8 @@ TEST(DecoratorMemberNames, InvalidIndices) {
     createInfo.szMemberLayout = "pip";
     createInfo.pszMemberNames = names.data();
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
 
     EXPECT_EQ(crf_decorator_get_num_members(decorator), 3);
     EXPECT_EQ(crf_decorator_get_member_index(decorator, "what"), CRF_INVALID_INDEX);

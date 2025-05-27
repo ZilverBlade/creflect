@@ -1,6 +1,6 @@
 #include "stubs.hpp"
+#include "util.hpp"
 #include <creflect/decorator.h>
-#include <gtest/gtest.h>
 #include <cstdlib>
 
 crf_allocator_table crf_GetNullMallocTable() {
@@ -28,8 +28,8 @@ TEST(AllocationErrHandler, CreateDecoratorNullMalloc) {
     createInfo.szMemberLayout = "iiii";
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-
-    EXPECT_FALSE(decorator);
+    EXPECT_EQ(crf_context_get_last_error(ctx), CRF_EC_ALLOCATION_ERROR);
+    EXPECT_NULL(decorator);
 
     crf_free_context(ctx);
 }
@@ -47,7 +47,8 @@ TEST(AllocationErrHandler, CreateDecoratorOddMalloc) {
     // needs to malloc for BOTH the decorator and the member types
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    EXPECT_FALSE(decorator);
+    EXPECT_EQ(crf_context_get_last_error(ctx), CRF_EC_ALLOCATION_ERROR);
+    EXPECT_NULL(decorator);
 
     crf_free_context(ctx);
 }

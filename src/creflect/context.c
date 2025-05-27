@@ -28,7 +28,7 @@ crf_context crf_create_context() {
     ctx->allocator.pfnRealloc = realloc;
     ctx->allocator.pfnFree = free;
     ctx->pReflectionChain = NULL;
-
+    ctx->eErrorCode = CRF_EC_SUCCESS;
     if (gContextChain) {
         gContextChain->nextContext = ctx;
     }
@@ -45,7 +45,15 @@ void crf_free_context(crf_context ctx) {
 }
 
 crf_context crf_get_context(size_t index) {
-
+    crf_context ctx = gContextChain;
+    size_t i = 0;
+    while (i++ < index) {
+        if (!ctx) {
+            return NULL;
+        }
+        ctx = ctx->nextContext;
+    }
+    return ctx;
 }
 
 const crf_allocator_table* crf_context_get_allocator(crf_context ctx) {
@@ -62,5 +70,9 @@ void crf_context_set_allocator(crf_context ctx, const crf_allocator_table* alloc
 }
 
 crf_error_code crf_context_get_last_error(crf_context ctx) {
-
+    return ctx->eErrorCode;
+}
+void shcrf_context_set_error(crf_context ctx, crf_error_code ec) {
+    assert(ctx);
+    ctx->eErrorCode = ec;
 }

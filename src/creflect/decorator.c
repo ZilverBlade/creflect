@@ -48,34 +48,51 @@ crf_decorator crf_create_decorator(crf_context ctx, const crf_decorator_create_i
     const crf_allocator_table* allocator = crf_context_get_allocator(ctx);
 
     crf_decorator result = (crf_decorator)allocator->pfnMalloc(sizeof(crf_decorator_t));
-    if (!result) return NULL;
-
+    if (!result) {
+        shcrf_context_set_error(ctx, CRF_EC_ALLOCATION_ERROR);
+        return NULL;
+    }
     result->cbStructTotal = 0;
     result->cMemberCount = layout->szMemberLayout ? strlen(layout->szMemberLayout) : 0;
     result->pMemberTypes = NULL;
     result->pszMemberNames = NULL;
 
+    crf_error_code ec;
+
     if (result->cMemberCount > 0) {
         result->pMemberTypes = (crf_member_type*)allocator->pfnMalloc(result->cMemberCount * sizeof(crf_member_type));
-        if (!result->pMemberTypes) goto fail_return;
+        if (!result->pMemberTypes) {
+            ec = CRF_EC_ALLOCATION_ERROR;
+            goto fail_return;
+        }
         if (layout->pszMemberNames) {
             for (size_t i = 0; i < result->cMemberCount; ++i) {
-                if (!crf_is_member_name_valid(layout->pszMemberNames[i])) goto fail_return;
+                if (!crf_is_member_name_valid(layout->pszMemberNames[i])) {
+                    ec = CRF_EC_INVALID_ARG;
+                    goto fail_return;
+                }
                 for (size_t j = 0; j < i; ++j) {
                     if (strcmp(layout->pszMemberNames[j], layout->pszMemberNames[i]) == 0) { // don't repeat member names
+                        ec = CRF_EC_INVALID_ARG;
                         goto fail_return;
                     }
                 }
             }
 
             result->pszMemberNames = (const char**)allocator->pfnMalloc(result->cMemberCount * sizeof(const char*));
-            if (!result->pszMemberNames) goto fail_return;
+            if (!result->pszMemberNames) {
+                ec = CRF_EC_ALLOCATION_ERROR;
+                goto fail_return;
+            }
             memset(result->pszMemberNames, 0, result->cMemberCount * sizeof(const char*));
 
             for (size_t i = 0; i < result->cMemberCount; ++i) {
                 size_t clearSize = strlen(layout->pszMemberNames[i]) + 1;
                 result->pszMemberNames[i] = (char*)allocator->pfnMalloc(clearSize);
-                if (!result->pszMemberNames[i]) goto fail_return;
+                if (!result->pszMemberNames[i]) {
+                    ec = CRF_EC_ALLOCATION_ERROR;
+                    goto fail_return;
+                }
                 memset(result->pszMemberNames[i], 0, clearSize);
                 strncpy(result->pszMemberNames[i], layout->pszMemberNames[i], clearSize - 1);
             }
@@ -84,15 +101,18 @@ crf_decorator crf_create_decorator(crf_context ctx, const crf_decorator_create_i
             result->pMemberTypes[i] = (crf_member_type)layout->szMemberLayout[i];
             size_t memberSz = crf_member_type_get_size(result->pMemberTypes[i]);
             if (memberSz == 0) {
+                ec = CRF_EC_INVALID_ARG;
                 goto fail_return;
             }
             result->cbStructTotal += (size_t)memberSz;
         }
     }
+    shcrf_context_set_error(ctx, CRF_EC_SUCCESS);
     return result;
 
 fail_return:
     crf_free_decorator(ctx, result);
+    shcrf_context_set_error(ctx, ec);
     return NULL;
 }
 
@@ -107,6 +127,7 @@ void crf_free_decorator(crf_context ctx, crf_decorator decorator) {
     allocator->pfnFree(decorator->pMemberTypes);
     allocator->pfnFree(decorator->pszMemberNames);
     allocator->pfnFree(decorator);
+    shcrf_context_set_error(ctx, CRF_EC_SUCCESS);
 }
 
 crf_member_type crf_decorator_get_member_type(crf_decorator decorator, size_t index) {

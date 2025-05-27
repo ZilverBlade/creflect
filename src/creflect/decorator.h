@@ -39,16 +39,16 @@ typedef struct crf_decorator_create_info {
     const char* const* pszMemberNames;
 } crf_decorator_create_info;
 
-crf_bool crf_is_member_name_valid(const char* szMemberName);
-size_t crf_member_type_get_size(const crf_member_type member);
+CREFLECT_API crf_bool crf_is_member_name_valid(const char* szMemberName);
+CREFLECT_API size_t crf_member_type_get_size(const crf_member_type member);
 
-crf_decorator crf_create_decorator(crf_context ctx, const crf_decorator_create_info* layout);
-void crf_free_decorator(crf_context ctx, crf_decorator decorator);
+CREFLECT_API crf_decorator crf_create_decorator(crf_context ctx, const crf_decorator_create_info* layout);
+CREFLECT_API void crf_free_decorator(crf_context ctx, crf_decorator decorator);
 
-crf_member_type crf_decorator_get_member_type(crf_decorator decorator, size_t index);
-size_t crf_decorator_get_member_index(crf_decorator decorator, const char* szMemberName);
-size_t crf_decorator_get_num_members(crf_decorator decorator);
-size_t crf_decorator_get_size(crf_decorator decorator);
+CREFLECT_API crf_member_type crf_decorator_get_member_type(crf_decorator decorator, size_t index);
+CREFLECT_API size_t crf_decorator_get_member_index(crf_decorator decorator, const char* szMemberName);
+CREFLECT_API size_t crf_decorator_get_num_members(crf_decorator decorator);
+CREFLECT_API size_t crf_decorator_get_size(crf_decorator decorator);
 
 
 #ifdef __cplusplus

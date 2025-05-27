@@ -1,6 +1,6 @@
 #include <creflect/decorator.h>
-#include <gtest/gtest.h>
 #include "spies.hpp"
+#include <util.hpp>
 
 TEST(DecoratorLayout, DecoratorSize) {
     crf_context ctx = crf_CreateContextWithAllocObserver();
@@ -9,7 +9,8 @@ TEST(DecoratorLayout, DecoratorSize) {
     createInfo.szMemberLayout = "cdfi";
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
 
     EXPECT_EQ(crf_decorator_get_num_members(decorator), 4);
     EXPECT_EQ(crf_decorator_get_size(decorator), CRF_MEMBER_SZ_CHAR + CRF_MEMBER_SZ_DOUBLE +
@@ -30,8 +31,8 @@ TEST(DecoratorLayout, NullMemberString) {
     createInfo.szMemberLayout = NULL;
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     EXPECT_EQ(crf_decorator_get_num_members(decorator), 0);
 
     crf_free_decorator(ctx, decorator);
@@ -45,8 +46,8 @@ TEST(DecoratorLayout, EmptyMemberString) {
     createInfo.szMemberLayout = "";
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     EXPECT_EQ(crf_decorator_get_num_members(decorator), 0);
 
     crf_free_decorator(ctx, decorator);
@@ -61,8 +62,8 @@ TEST(DecoratorLayout, BadMemberString) {
     createInfo.szMemberLayout = "OI";
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-
-    EXPECT_FALSE(decorator);
+    EXPECT_EQ(crf_context_get_last_error(ctx), CRF_EC_INVALID_ARG);
+    EXPECT_NULL(decorator);
 
     crf_FreeContextAndVerify(ctx);
 }
@@ -76,7 +77,8 @@ TEST(DecoratorLayout, BadMixMemberString) {
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    EXPECT_FALSE(decorator);
+    EXPECT_EQ(crf_context_get_last_error(ctx), CRF_EC_INVALID_ARG);
+    EXPECT_NULL(decorator);
 
     crf_FreeContextAndVerify(ctx);
 }
@@ -88,8 +90,8 @@ TEST(DecoratorLayout, AllGoodMemberString) {
     createInfo.szMemberLayout = "csilfdp";
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
 
     crf_free_decorator(ctx, decorator);
     crf_FreeContextAndVerify(ctx);
@@ -103,7 +105,8 @@ TEST(DecoratorLayout, MemberTypeCharCorrectness) {
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     EXPECT_EQ(crf_decorator_get_member_type(decorator, 0), CRF_MEMBER_CHAR);
 
     crf_free_decorator(ctx, decorator);
@@ -117,8 +120,8 @@ TEST(DecoratorLayout, MemberTypeShortCorrectness) {
     createInfo.szMemberLayout = "s";
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
-
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     EXPECT_EQ(crf_decorator_get_member_type(decorator, 0), CRF_MEMBER_SHORT);
 
     crf_free_decorator(ctx, decorator);
@@ -134,7 +137,8 @@ TEST(DecoratorLayout, MemberTypeIntCorrectness) {
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     EXPECT_EQ(crf_decorator_get_member_type(decorator, 0), CRF_MEMBER_INTEGER);
 
     crf_free_decorator(ctx, decorator);
@@ -149,7 +153,8 @@ TEST(DecoratorLayout, MemberTypeLongCorrectness) {
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     EXPECT_EQ(crf_decorator_get_member_type(decorator, 0), CRF_MEMBER_LONG);
 
     crf_free_decorator(ctx, decorator);
@@ -164,7 +169,8 @@ TEST(DecoratorLayout, MemberTypeFloatCorrectness) {
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     EXPECT_EQ(crf_decorator_get_member_type(decorator, 0), CRF_MEMBER_FLOAT);
 
     crf_free_decorator(ctx, decorator);
@@ -179,7 +185,8 @@ TEST(DecoratorLayout, MemberTypeDoubleCorrectness) {
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     EXPECT_EQ(crf_decorator_get_member_type(decorator, 0), CRF_MEMBER_DOUBLE);
 
     crf_free_decorator(ctx, decorator);
@@ -194,7 +201,8 @@ TEST(DecoratorLayout, MemberTypePointerCorrectness) {
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     EXPECT_EQ(crf_decorator_get_member_type(decorator, 0), CRF_MEMBER_POINTER);
 
     crf_free_decorator(ctx, decorator);
@@ -210,7 +218,8 @@ TEST(DecoratorLayout, InvalidMemberIndex) {
     createInfo.pszMemberNames = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
 
-    EXPECT_TRUE(decorator);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     EXPECT_EQ(crf_decorator_get_member_type(decorator, -1), CRF_MEMBER_INVALID);
     EXPECT_EQ(crf_decorator_get_member_type(decorator, 3), CRF_MEMBER_INVALID);
     EXPECT_NE(crf_decorator_get_member_type(decorator, 0), CRF_MEMBER_INVALID);
