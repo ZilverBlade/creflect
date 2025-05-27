@@ -29,7 +29,7 @@ typedef crf_long crf_int64;
 typedef crf_ulong crf_uint64;
 typedef void* crf_ptr;
 
-#ifdef CREFLECT_SHARED_LIB && _WIN32
+#if defined(CREFLECT_SHARED_LIB) && defined(_WIN32)
 #ifdef creflect_src
 #define CREFLECT_API __declspec(dllexport)
 #else
