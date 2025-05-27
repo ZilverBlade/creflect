@@ -11,7 +11,7 @@ enum hashmap_entry_state {
 
 typedef struct crf_hashmap_entry {
     char eState;
-    void* pValue;
+    const void* pValue; // not sure whether this should be const or not, could be considered an immutable pointer
     const void* pKey;
 } crf_hashmap_entry;
 
@@ -91,7 +91,7 @@ void crf_free_fixed_hashmap(const crf_allocator_table* pAllocator, crf_fixed_has
     pAllocator->pfnFree(map);
 }
 
-void* crf_fixed_hashmap_insert(crf_fixed_hashmap map, const void* key, void* value) {
+const void* crf_fixed_hashmap_insert(crf_fixed_hashmap map, const void* key, const void* value) {
     assert(map && "don't pass a null map");
 
     size_t index = get_fixedhashmap_entry_index(map, key, CRF_TRUE);
@@ -119,7 +119,7 @@ crf_bool crf_fixed_hashmap_remove(crf_fixed_hashmap map, const void* key) {
     return CRF_TRUE;
 }
 
-void* crf_fixed_hashmap_get_ptr(crf_fixed_hashmap map, const void* key) {
+const void* crf_fixed_hashmap_get_ptr(crf_fixed_hashmap map, const void* key) {
     assert(map && "don't pass a null map");
     
     size_t index = get_fixedhashmap_entry_index(map, key, CRF_FALSE);
