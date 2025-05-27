@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#define CRF_INVALID_INDEX (size_t)(-1)
+#define CRF_INVALID_INDEX ((size_t)(SIZE_MAX))
 typedef enum crf_bool {
     CRF_FALSE = 0,
     CRF_TRUE = 1

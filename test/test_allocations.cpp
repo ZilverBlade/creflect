@@ -1,5 +1,6 @@
 #include "stubs.hpp"
 #include "util.hpp"
+#include <creflect/hashmap.h>
 #include <creflect/decorator.h>
 #include <cstdlib>
 
@@ -51,4 +52,21 @@ TEST(AllocationErrHandler, CreateDecoratorOddMalloc) {
     EXPECT_NULL(decorator);
 
     crf_free_context(ctx);
+}
+
+
+TEST(AllocationErrHandler, CreateHashMapNullAllocator) {
+    crf_allocator_table table = crf_GetNullMallocTable();
+
+    // needs to malloc for BOTH the decorator and the member types
+    crf_fixed_hashmap map = crf_create_fixed_hashmap(&table, 0, [](const void*) {return size_t(); }, [](const void*, const void*) {return int(); });
+    EXPECT_NULL(map);
+}
+
+TEST(AllocationErrHandler, CreateHashMapOddAllocator) {
+    crf_allocator_table table = crf_GetRussianRouletteMallocTable();
+    // needs to malloc for BOTH the map and the entries
+    crf_fixed_hashmap map = crf_create_fixed_hashmap(&table, 0, [](const void*) {return size_t(); }, [](const void*, const void*) {return int(); });
+    EXPECT_NULL(map);
+
 }
