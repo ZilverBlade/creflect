@@ -4,7 +4,7 @@
 #include <vector>
 
 TEST(DecoratorMemberNames, SingleName) {
-    crf_context ctx = crf_CreateContextWithAllocObserver();
+    crf_context ctx = MallocSpyVerifyMemory::CreateContextWithAllocObserver();
 
     std::vector<const char*> names{
         "pBufferData"
@@ -13,6 +13,8 @@ TEST(DecoratorMemberNames, SingleName) {
     crf_decorator_create_info createInfo;
     createInfo.szMemberLayout = "p";
     createInfo.pszMemberNames = names.data();
+    createInfo.pcbMemberOffsets = NULL;
+    createInfo.pStructDecorators = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
     CRF_EXP_CTX_SUCCESS(ctx);
     EXPECT_NOT_NULL(decorator);
@@ -20,10 +22,10 @@ TEST(DecoratorMemberNames, SingleName) {
     EXPECT_EQ(crf_decorator_get_num_members(decorator), 1);
 
     crf_free_decorator(ctx, decorator);
-    crf_FreeContextAndVerify(ctx);
+    MallocSpyVerifyMemory::FreeContextAndVerify(ctx);
 }
 TEST(DecoratorMemberNames, TwoNames) {
-    crf_context ctx = crf_CreateContextWithAllocObserver();
+    crf_context ctx = MallocSpyVerifyMemory::CreateContextWithAllocObserver();
 
     std::vector<const char*> names{
         "pBufferData",
@@ -33,6 +35,8 @@ TEST(DecoratorMemberNames, TwoNames) {
     crf_decorator_create_info createInfo;
     createInfo.szMemberLayout = "pp";
     createInfo.pszMemberNames = names.data();
+    createInfo.pcbMemberOffsets = NULL;
+    createInfo.pStructDecorators = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
     CRF_EXP_CTX_SUCCESS(ctx);
     EXPECT_NOT_NULL(decorator);
@@ -40,10 +44,10 @@ TEST(DecoratorMemberNames, TwoNames) {
     EXPECT_EQ(crf_decorator_get_num_members(decorator), 2);
 
     crf_free_decorator(ctx, decorator);
-    crf_FreeContextAndVerify(ctx);
+    MallocSpyVerifyMemory::FreeContextAndVerify(ctx);
 }
 TEST(DecoratorMemberNames, InvalidDuplicate) {
-    crf_context ctx = crf_CreateContextWithAllocObserver();
+    crf_context ctx = MallocSpyVerifyMemory::CreateContextWithAllocObserver();
 
     std::vector<const char*> names{
         "pBufferData",
@@ -53,14 +57,16 @@ TEST(DecoratorMemberNames, InvalidDuplicate) {
     crf_decorator_create_info createInfo;
     createInfo.szMemberLayout = "pp";
     createInfo.pszMemberNames = names.data();
+    createInfo.pcbMemberOffsets = NULL;
+    createInfo.pStructDecorators = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
     EXPECT_EQ(crf_context_get_last_error(ctx), CRF_EC_INVALID_ARG);
     EXPECT_NULL(decorator);
 
-    crf_FreeContextAndVerify(ctx);
+    MallocSpyVerifyMemory::FreeContextAndVerify(ctx);
 }
 TEST(DecoratorMemberNames, CorrectIndices) {
-    crf_context ctx = crf_CreateContextWithAllocObserver();
+    crf_context ctx = MallocSpyVerifyMemory::CreateContextWithAllocObserver();
 
     std::vector<const char*> names{
         "pBufferData",
@@ -71,6 +77,8 @@ TEST(DecoratorMemberNames, CorrectIndices) {
     crf_decorator_create_info createInfo;
     createInfo.szMemberLayout = "pip";
     createInfo.pszMemberNames = names.data();
+    createInfo.pcbMemberOffsets = NULL;
+    createInfo.pStructDecorators = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
     CRF_EXP_CTX_SUCCESS(ctx);
     EXPECT_NOT_NULL(decorator);
@@ -81,11 +89,11 @@ TEST(DecoratorMemberNames, CorrectIndices) {
     EXPECT_EQ(crf_decorator_get_member_index(decorator, names[2]), 2);
 
     crf_free_decorator(ctx, decorator);
-    crf_FreeContextAndVerify(ctx);
+    MallocSpyVerifyMemory::FreeContextAndVerify(ctx);
 }
 
 TEST(DecoratorMemberNames, InvalidIndices) {
-    crf_context ctx = crf_CreateContextWithAllocObserver();
+    crf_context ctx = MallocSpyVerifyMemory::CreateContextWithAllocObserver();
 
     std::vector<const char*> names{
         "pBufferData",
@@ -96,6 +104,8 @@ TEST(DecoratorMemberNames, InvalidIndices) {
     crf_decorator_create_info createInfo;
     createInfo.szMemberLayout = "pip";
     createInfo.pszMemberNames = names.data();
+    createInfo.pcbMemberOffsets = NULL;
+    createInfo.pStructDecorators = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
     CRF_EXP_CTX_SUCCESS(ctx);
     EXPECT_NOT_NULL(decorator);
@@ -106,5 +116,5 @@ TEST(DecoratorMemberNames, InvalidIndices) {
     EXPECT_EQ(crf_decorator_get_member_index(decorator, "puserdata"), CRF_INVALID_INDEX);
 
     crf_free_decorator(ctx, decorator);
-    crf_FreeContextAndVerify(ctx);
+    MallocSpyVerifyMemory::FreeContextAndVerify(ctx);
 }

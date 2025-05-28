@@ -68,15 +68,15 @@ crf_fixed_hashmap crf_create_fixed_hashmap(const crf_allocator_table* pAllocator
     assert(pAllocator && "don't pass a null allocator");
     assert(pfnHashCode && pfnEquals && "don't pass null functions for allocators and hashcodes");
 
-    crf_fixed_hashmap map = (crf_fixed_hashmap)pAllocator->pfnMalloc(sizeof(crf_fixed_hashmap_t));
+    crf_fixed_hashmap map = (crf_fixed_hashmap)pAllocator->pfnMalloc(sizeof(crf_fixed_hashmap_t), pAllocator->pUserData);
     if (!map) return NULL;
 
     map->cSize = cSize;
     map->pfnEquals = pfnEquals;
     map->pfnHashCode = pfnHashCode;
-    map->pEntries = pAllocator->pfnMalloc(cSize * sizeof(crf_hashmap_entry));
+    map->pEntries = pAllocator->pfnMalloc(cSize * sizeof(crf_hashmap_entry), pAllocator->pUserData);
     if (!map->pEntries) {
-        pAllocator->pfnFree(map);
+        pAllocator->pfnFree(map, pAllocator->pUserData);
         return NULL;
     }
     memset(map->pEntries, 0, cSize * sizeof(crf_hashmap_entry));
@@ -86,9 +86,9 @@ crf_fixed_hashmap crf_create_fixed_hashmap(const crf_allocator_table* pAllocator
 void crf_free_fixed_hashmap(const crf_allocator_table* pAllocator, crf_fixed_hashmap map) {
     assert(pAllocator && "don't pass a null allocator");
     if (map) {
-        pAllocator->pfnFree(map->pEntries);
+        pAllocator->pfnFree(map->pEntries, pAllocator->pUserData);
     }
-    pAllocator->pfnFree(map);
+    pAllocator->pfnFree(map, pAllocator->pUserData);
 }
 
 const void* crf_fixed_hashmap_insert(crf_fixed_hashmap map, const void* key, const void* value) {

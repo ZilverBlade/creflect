@@ -59,4 +59,5 @@ add_dependencies(testSuite creflect)
 target_link_libraries(testSuite
   creflect
   GTest::gtest_main
+  GTest::gmock_main
   )

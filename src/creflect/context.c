@@ -21,12 +21,23 @@ typedef struct crf_context_t {
     crf_context nextContext;
 } crf_context_t;
 
+static void* mallocwrapper(size_t s, void* _) {
+    return malloc(s);
+}
+static void freewrapper(void* p, void* _) {
+    return free(p);
+}
+static void* reallocwrapper(void* p, size_t s, void* _) {
+    return realloc(p, s);
+}
+
 crf_context crf_create_context() {
     crf_context ctx = (crf_context)malloc(sizeof(crf_context_t));
     if (!ctx) return NULL;
-    ctx->allocator.pfnMalloc = malloc;
-    ctx->allocator.pfnRealloc = realloc;
-    ctx->allocator.pfnFree = free;
+    ctx->allocator.pUserData = NULL;
+    ctx->allocator.pfnMalloc = mallocwrapper;
+    ctx->allocator.pfnRealloc = reallocwrapper;
+    ctx->allocator.pfnFree = freewrapper;
     ctx->pReflectionChain = NULL;
     ctx->eErrorCode = CRF_EC_SUCCESS;
     if (gContextChain) {
@@ -66,7 +77,7 @@ void crf_context_set_allocator(crf_context ctx, const crf_allocator_table* alloc
     assert(allocator->pfnMalloc && "malloc not defined!");
     assert(allocator->pfnRealloc && "realloc not defined!");
 
-    memcpy(&ctx->allocator, allocator, sizeof(crf_allocator_table));
+    ctx->allocator = *allocator;
 }
 
 crf_error_code crf_context_get_last_error(crf_context ctx) {

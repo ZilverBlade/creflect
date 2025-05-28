@@ -1,5 +1,6 @@
 #ifndef CREFLECT_HASHMAP_H
 #define CREFLECT_HASHMAP_H
+#include <stddef.h>
 #include "allocator.h"
 #include "defs.h"
 #ifdef __cplusplus

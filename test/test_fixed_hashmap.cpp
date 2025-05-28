@@ -26,48 +26,53 @@ crf_fn_equals string_equals = [](const void* key1, const void* key2) -> int {
     return strcmp((char*)key1, (char*)key2) == 0;
 };
 
-static crf_allocator_table allocator = { crf_MallocSpy, crf_FreeSpy, crf_ReallocSpy };
 
 TEST(FixedHashMap, ValidInitialisation) {
+    crf_allocator_table allocator = MallocSpyVerifyMemory::CreateAllocObserver();
     crf_fixed_hashmap hashmap = crf_create_fixed_hashmap(&allocator, 10, string_hashcode, string_equals);
     EXPECT_NOT_NULL(hashmap);
     crf_free_fixed_hashmap(&allocator, hashmap);
-    EXPECT_EQ(crf_GetNumDanglingPointers(), 0);
+    MallocSpyVerifyMemory::FreeAllocObserverAndVerify(&allocator);
 }
 TEST(FixedHashMap, InvalidAccess) {
+    crf_allocator_table allocator = MallocSpyVerifyMemory::CreateAllocObserver();
     crf_fixed_hashmap hashmap = crf_create_fixed_hashmap(&allocator, 10, string_hashcode, string_equals);
     EXPECT_NOT_NULL(hashmap);
     EXPECT_NULL(crf_fixed_hashmap_get_ptr(hashmap, "hello"));
     crf_free_fixed_hashmap(&allocator, hashmap);
-    EXPECT_EQ(crf_GetNumDanglingPointers(), 0);
+    MallocSpyVerifyMemory::FreeAllocObserverAndVerify(&allocator);
 }
 TEST(FixedHashMap, ValidAccessAdd) {
+    crf_allocator_table allocator = MallocSpyVerifyMemory::CreateAllocObserver();
     crf_fixed_hashmap hashmap = crf_create_fixed_hashmap(&allocator, 10, string_hashcode, string_equals);
     EXPECT_NOT_NULL(hashmap);
     EXPECT_NOT_NULL(crf_fixed_hashmap_insert(hashmap, "hello", "test"));
     EXPECT_NOT_NULL(crf_fixed_hashmap_get(char*, hashmap, "hello"));
     crf_free_fixed_hashmap(&allocator, hashmap);
-    EXPECT_EQ(crf_GetNumDanglingPointers(), 0);
+    MallocSpyVerifyMemory::FreeAllocObserverAndVerify(&allocator);
 }
 TEST(FixedHashMap, ValidAccessRemove) {
+    crf_allocator_table allocator = MallocSpyVerifyMemory::CreateAllocObserver();
     crf_fixed_hashmap hashmap = crf_create_fixed_hashmap(&allocator, 10, string_hashcode, string_equals);
     EXPECT_NOT_NULL(hashmap);
     EXPECT_NOT_NULL(crf_fixed_hashmap_insert(hashmap, "hello", "test"));
     EXPECT_TRUE(crf_fixed_hashmap_remove(hashmap, "hello"));
     crf_free_fixed_hashmap(&allocator, hashmap);
-    EXPECT_EQ(crf_GetNumDanglingPointers(), 0);
+    MallocSpyVerifyMemory::FreeAllocObserverAndVerify(&allocator);
 }
 TEST(FixedHashMap, ValidAccessCollission) {
+    crf_allocator_table allocator = MallocSpyVerifyMemory::CreateAllocObserver();
     crf_fixed_hashmap hashmap = crf_create_fixed_hashmap(&allocator, 10, string_bad_hashcode, string_equals);
     EXPECT_NOT_NULL(hashmap);
     EXPECT_STREQ((char*)crf_fixed_hashmap_insert(hashmap, "hello", "test"), "test");
     EXPECT_STREQ((char*)crf_fixed_hashmap_insert(hashmap, "what?", "another test"), "another test");
     EXPECT_STREQ(crf_fixed_hashmap_get(char*, hashmap, "hello"), "test");
     crf_free_fixed_hashmap(&allocator, hashmap);
-    EXPECT_EQ(crf_GetNumDanglingPointers(), 0);
+    MallocSpyVerifyMemory::FreeAllocObserverAndVerify(&allocator);
 }
 
 TEST(FixedHashMap, OverFillNull) {
+    crf_allocator_table allocator = MallocSpyVerifyMemory::CreateAllocObserver();
     crf_fixed_hashmap hashmap = crf_create_fixed_hashmap(&allocator, 2, string_hashcode, string_equals);
     EXPECT_NOT_NULL(hashmap);
     EXPECT_NOT_NULL(crf_fixed_hashmap_insert(hashmap, "hello", "test"));
@@ -75,19 +80,21 @@ TEST(FixedHashMap, OverFillNull) {
     EXPECT_NULL(crf_fixed_hashmap_insert(hashmap, "test?", "another test again"));
     EXPECT_STREQ(crf_fixed_hashmap_get(char*, hashmap, "hello"), "test");
     crf_free_fixed_hashmap(&allocator, hashmap);
-    EXPECT_EQ(crf_GetNumDanglingPointers(), 0);
+    MallocSpyVerifyMemory::FreeAllocObserverAndVerify(&allocator);
 }
 TEST(FixedHashMap, ExistingKeyInsert) {
+    crf_allocator_table allocator = MallocSpyVerifyMemory::CreateAllocObserver();
     crf_fixed_hashmap hashmap = crf_create_fixed_hashmap(&allocator, 10, string_bad_hashcode, string_equals);
     EXPECT_NOT_NULL(hashmap);
     EXPECT_NOT_NULL(crf_fixed_hashmap_insert(hashmap, "hello", "test"));
     char* result = (char*)crf_fixed_hashmap_insert(hashmap, "hello", "another test");
     EXPECT_STREQ(result, "another test");
     crf_free_fixed_hashmap(&allocator, hashmap);
-    EXPECT_EQ(crf_GetNumDanglingPointers(), 0);
+    MallocSpyVerifyMemory::FreeAllocObserverAndVerify(&allocator);
 }
 
 TEST(FixedHashMap, ValidAccessCollissionEndOfArray) {
+    crf_allocator_table allocator = MallocSpyVerifyMemory::CreateAllocObserver();
     crf_fixed_hashmap hashmap = crf_create_fixed_hashmap(&allocator, 3, string_bad_hashcode, string_equals);
     EXPECT_NOT_NULL(hashmap);
     EXPECT_NOT_NULL(crf_fixed_hashmap_insert(hashmap, "hello", "test"));
@@ -95,9 +102,10 @@ TEST(FixedHashMap, ValidAccessCollissionEndOfArray) {
     EXPECT_STREQ(crf_fixed_hashmap_get(char*, hashmap, "hello"), "test");
     EXPECT_STREQ(crf_fixed_hashmap_get(char*, hashmap, "what?"), "another test");
     crf_free_fixed_hashmap(&allocator, hashmap);
-    EXPECT_EQ(crf_GetNumDanglingPointers(), 0);
+    MallocSpyVerifyMemory::FreeAllocObserverAndVerify(&allocator);
 }
 TEST(FixedHashMap, ValidAccessCollissionAfterRemoval) {
+    crf_allocator_table allocator = MallocSpyVerifyMemory::CreateAllocObserver();
     crf_fixed_hashmap hashmap = crf_create_fixed_hashmap(&allocator, 3, string_bad_hashcode, string_equals);
     EXPECT_NOT_NULL(hashmap);
     EXPECT_NOT_NULL(crf_fixed_hashmap_insert(hashmap, "hello", "test"));
@@ -105,5 +113,5 @@ TEST(FixedHashMap, ValidAccessCollissionAfterRemoval) {
     EXPECT_TRUE(crf_fixed_hashmap_remove(hashmap, "hello"));
     EXPECT_STREQ(crf_fixed_hashmap_get(char*, hashmap, "what?"), "another test");
     crf_free_fixed_hashmap(&allocator, hashmap);
-    EXPECT_EQ(crf_GetNumDanglingPointers(), 0);
+    MallocSpyVerifyMemory::FreeAllocObserverAndVerify(&allocator);
 }
