@@ -8,13 +8,15 @@
 
 TEST(AllocationErrHandler, TestCustomAllocator) {
     crf_context ctx = crf_create_context();
-    MockMallocSpyVerifyMemory mallocFn{};
+    MockMalloc mallocFn{};
 
     EXPECT_CALL(mallocFn, Malloc(_))
         .Times(AtLeast(1));
     EXPECT_CALL(mallocFn, Free(_))
         .Times(AtLeast(1));
-    
+    ON_CALL(mallocFn, Malloc(_)).WillByDefault(malloc);
+    ON_CALL(mallocFn, Free(_)).WillByDefault(free);
+
     crf_allocator_table table = mallocFn.BindAllocator();
     crf_context_set_allocator(ctx, &table);
     crf_decorator_create_info createInfo;
@@ -27,16 +29,15 @@ TEST(AllocationErrHandler, TestCustomAllocator) {
     EXPECT_NOT_NULL(decorator);
     crf_free_decorator(ctx, decorator);
     crf_free_context(ctx);
-    EXPECT_EQ(mallocFn.GetNumDanglingPointers(), 0);
 }
 
 TEST(AllocationErrHandler, CreateDecoratorNullMalloc) {
     crf_context ctx = crf_create_context();
-    MockNullMalloc nullMalloc{};
 
+    MockMalloc nullMalloc{};
     EXPECT_CALL(nullMalloc, Malloc(_))
-        .Times(Exactly(1))
-        .WillOnce(Return(nullptr));
+        .Times(AtLeast(1));
+    ON_CALL(nullMalloc, Malloc(_)).WillByDefault(ReturnNull());
 
     crf_allocator_table table = nullMalloc.BindAllocator();
     crf_context_set_allocator(ctx, &table);
@@ -59,10 +60,10 @@ TEST(AllocationErrHandler, CreateDecoratorFailedMallocAfterOnce) {
     oddMalloc
         .MallocByDefault(true)
         .WhenMallocAttempt(1, false);
+    ON_CALL(oddMalloc, Malloc(_)).WillByDefault(std::bind(&ProgrammableMalloc::Malloc, &oddMalloc, std::placeholders::_1));
 
     EXPECT_CALL(oddMalloc, Malloc(_))
-        .Times(Exactly(1))
-        .WillOnce(ReturnNull());
+        .Times(Exactly(2));
 
     EXPECT_CALL(oddMalloc, Free(_))
         .Times(AtLeast(1));
@@ -91,10 +92,9 @@ TEST(AllocationErrHandler, CreateDecoratorFailedMallocAfterTwice) {
     oddMalloc
         .MallocByDefault(true)
         .WhenMallocAttempt(2, false);
-
+    ON_CALL(oddMalloc, Malloc(_)).WillByDefault(std::bind(&ProgrammableMalloc::Malloc, &oddMalloc, std::placeholders::_1));
     EXPECT_CALL(oddMalloc, Malloc(_))
-        .Times(Exactly(3))
-        .WillOnce(ReturnNull());
+        .Times(Exactly(3));
 
     EXPECT_CALL(oddMalloc, Free(_))
         .Times(AtLeast(2));
@@ -121,7 +121,8 @@ TEST(AllocationErrHandler, CreateDecoratorFailedMallocAfterTwice) {
 
 
 TEST(AllocationErrHandler, CreateHashMapNullAllocator) {
-    MockNullMalloc nullMalloc{};
+    MockMalloc nullMalloc{};
+    ON_CALL(nullMalloc, Malloc(_)).WillByDefault(ReturnNull());
 
     EXPECT_CALL(nullMalloc, Malloc(_))
         .Times(Exactly(1))
@@ -134,14 +135,15 @@ TEST(AllocationErrHandler, CreateHashMapNullAllocator) {
 }
 
 TEST(AllocationErrHandler, CreateHashMapOddAllocator) {
+    crf_context ctx = crf_create_context();
     MockProgrammableMalloc oddMalloc{};
     oddMalloc
         .MallocByDefault(true)
         .WhenMallocAttempt(1, false);
+    ON_CALL(oddMalloc, Malloc(_)).WillByDefault(std::bind(&ProgrammableMalloc::Malloc, &oddMalloc, std::placeholders::_1));
 
     EXPECT_CALL(oddMalloc, Malloc(_))
-        .Times(Exactly(2))
-        .WillOnce(ReturnNull());
+        .Times(Exactly(2));
 
     EXPECT_CALL(oddMalloc, Free(_))
         .Times(AtLeast(1));

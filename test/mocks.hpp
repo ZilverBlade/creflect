@@ -3,7 +3,7 @@
 #include "stubs.hpp"
 #include <gmock/gmock.h>
 
-class MockNullMalloc : public NullMalloc {
+class MockMalloc : public AbstractMalloc {
 public:
     MOCK_METHOD(void*, Malloc, (size_t), (override));
     MOCK_METHOD(void, Free, (void*), (override));

@@ -1,5 +1,5 @@
-#ifndef CREFLECT_PACK_H
-#define CREFLECT_PACK_H
+#ifndef CREFLECT_STRUCT_H
+#define CREFLECT_STRUCT_H
 
 #include "decorator.h"
 

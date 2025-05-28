@@ -1,5 +1,5 @@
-#ifndef CREFLECT_STRUCT_LAYOUT_H
-#define CREFLECT_STRUCT_LAYOUT_H
+#ifndef CREFLECT_DECORATOR_H
+#define CREFLECT_DECORATOR_H
 #include "context.h"
 
 #ifdef __cplusplus
