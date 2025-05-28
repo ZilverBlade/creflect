@@ -60,7 +60,7 @@ TEST(AllocationErrHandler, CreateDecoratorFailedMallocAfterOnce) {
     oddMalloc
         .MallocByDefault(true)
         .WhenMallocAttempt(1, false);
-    ON_CALL(oddMalloc, Malloc(_)).WillByDefault(std::bind(&ProgrammableMalloc::Malloc, &oddMalloc, std::placeholders::_1));
+    ON_CALL(oddMalloc, Malloc(_)).WillByDefault([&](size_t s) {return oddMalloc.ProgrammableMalloc::Malloc(s); });
 
     EXPECT_CALL(oddMalloc, Malloc(_))
         .Times(Exactly(2));
@@ -92,7 +92,7 @@ TEST(AllocationErrHandler, CreateDecoratorFailedMallocAfterTwice) {
     oddMalloc
         .MallocByDefault(true)
         .WhenMallocAttempt(2, false);
-    ON_CALL(oddMalloc, Malloc(_)).WillByDefault(std::bind(&ProgrammableMalloc::Malloc, &oddMalloc, std::placeholders::_1));
+    ON_CALL(oddMalloc, Malloc(_)).WillByDefault([&](size_t s) {return oddMalloc.ProgrammableMalloc::Malloc(s); });
     EXPECT_CALL(oddMalloc, Malloc(_))
         .Times(Exactly(3));
 
@@ -140,7 +140,7 @@ TEST(AllocationErrHandler, CreateHashMapOddAllocator) {
     oddMalloc
         .MallocByDefault(true)
         .WhenMallocAttempt(1, false);
-    ON_CALL(oddMalloc, Malloc(_)).WillByDefault(std::bind(&ProgrammableMalloc::Malloc, &oddMalloc, std::placeholders::_1));
+    ON_CALL(oddMalloc, Malloc(_)).WillByDefault([&](size_t s) {return oddMalloc.ProgrammableMalloc::Malloc(s); });
 
     EXPECT_CALL(oddMalloc, Malloc(_))
         .Times(Exactly(2));
