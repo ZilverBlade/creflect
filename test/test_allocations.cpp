@@ -8,17 +8,14 @@
 
 TEST(AllocationErrHandler, TestCustomAllocator) {
     crf_context ctx = crf_create_context();
-    MockProgrammableMalloc oddMalloc{};
-    oddMalloc
-        .MallocByDefault(true)
-        .ReallocByDefault(true);
+    MockMallocSpyVerifyMemory mallocFn{};
 
-    EXPECT_CALL(oddMalloc, Malloc(_))
+    EXPECT_CALL(mallocFn, Malloc(_))
         .Times(AtLeast(1));
-    EXPECT_CALL(oddMalloc, Free(_))
+    EXPECT_CALL(mallocFn, Free(_))
         .Times(AtLeast(1));
-
-    crf_allocator_table table = oddMalloc.BindAllocator();
+    
+    crf_allocator_table table = mallocFn.BindAllocator();
     crf_context_set_allocator(ctx, &table);
     crf_decorator_create_info createInfo;
     createInfo.szMemberLayout = "iiii";
@@ -26,9 +23,11 @@ TEST(AllocationErrHandler, TestCustomAllocator) {
     createInfo.pcbMemberOffsets = NULL;
     createInfo.pStructDecorators = NULL;
     crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
     crf_free_decorator(ctx, decorator);
-
     crf_free_context(ctx);
+    EXPECT_EQ(mallocFn.GetNumDanglingPointers(), 0);
 }
 
 TEST(AllocationErrHandler, CreateDecoratorNullMalloc) {

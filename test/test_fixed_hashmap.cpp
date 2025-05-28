@@ -79,6 +79,7 @@ TEST(FixedHashMap, OverFillNull) {
     EXPECT_NOT_NULL(crf_fixed_hashmap_insert(hashmap, "what?", "another test"));
     EXPECT_NULL(crf_fixed_hashmap_insert(hashmap, "test?", "another test again"));
     EXPECT_STREQ(crf_fixed_hashmap_get(char*, hashmap, "hello"), "test");
+    EXPECT_STREQ(crf_fixed_hashmap_get(char*, hashmap, "what?"), "another test");
     crf_free_fixed_hashmap(&allocator, hashmap);
     MallocSpyVerifyMemory::FreeAllocObserverAndVerify(&allocator);
 }
