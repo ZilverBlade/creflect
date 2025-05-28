@@ -5,7 +5,7 @@
 #include <string.h>
 
 typedef struct crf_decorator_t {
-    const char** pszMemberNames;
+    char** pszMemberNames;
     crf_member_type* pMemberTypes;
     crf_decorator* pStructDecorators;
 

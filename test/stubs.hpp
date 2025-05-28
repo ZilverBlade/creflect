@@ -36,10 +36,8 @@ public:
             success = willSucceedMalloc[idx];
         }
         if (success) {
-            printf("malloc success\n");
             return malloc(size);
         }
-        printf("malloc fail\n");
         return NULL;
     }
     virtual void Free(void* ptr) override {
