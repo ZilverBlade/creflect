@@ -443,3 +443,63 @@ TEST(DecoratorLayout, InvalidNestedStructDecoratorMissing) {
 
     MallocSpyVerifyMemory::FreeContextAndVerify(ctx);
 }
+
+TEST(DecoratorLayout, InvalidNestedStructDecoratorNullDecorator) {
+    crf_context ctx = MallocSpyVerifyMemory::CreateContextWithAllocObserver();
+    crf_decorator nullDecor = NULL;
+    crf_decorator_create_info createInfo;
+    createInfo.szMemberLayout = "S";
+    createInfo.pszMemberNames = NULL;
+    createInfo.pcbMemberOffsets = NULL;
+    createInfo.pStructDecorators = &nullDecor;
+
+    crf_decorator decorator2 = crf_create_decorator(ctx, &createInfo);
+    EXPECT_EQ(crf_context_get_last_error(ctx), CRF_EC_INVALID_ARG);
+    EXPECT_NULL(decorator2);
+
+    MallocSpyVerifyMemory::FreeContextAndVerify(ctx);
+}
+
+TEST(DecoratorLayout, ValidMemberOffsetsVerifyCorrectSize) {
+    crf_context ctx = MallocSpyVerifyMemory::CreateContextWithAllocObserver();
+    std::vector<size_t> offsets{
+        2,
+        6,
+        10,
+        14
+    };
+    crf_decorator_create_info createInfo;
+    createInfo.szMemberLayout = "cisc";
+    createInfo.pszMemberNames = NULL;
+    createInfo.pcbMemberOffsets = offsets.data();
+    createInfo.pStructDecorators = NULL;
+    crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
+
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
+    EXPECT_EQ(crf_decorator_get_size(decorator), 15); // due to the massive offsets, it should be the correct size
+
+    crf_free_decorator(ctx, decorator);
+    MallocSpyVerifyMemory::FreeContextAndVerify(ctx);
+}
+TEST(DecoratorLayout, ValidMemberOffsetsVerifyCorrectSize2) {
+    crf_context ctx = MallocSpyVerifyMemory::CreateContextWithAllocObserver();
+    std::vector<size_t> offsets{
+        9,
+        16,
+        24
+    };
+    crf_decorator_create_info createInfo;
+    createInfo.szMemberLayout = "ild";
+    createInfo.pszMemberNames = NULL;
+    createInfo.pcbMemberOffsets = offsets.data();
+    createInfo.pStructDecorators = NULL;
+    crf_decorator decorator = crf_create_decorator(ctx, &createInfo);
+
+    CRF_EXP_CTX_SUCCESS(ctx);
+    EXPECT_NOT_NULL(decorator);
+    EXPECT_EQ(crf_decorator_get_size(decorator), 32); 
+
+    crf_free_decorator(ctx, decorator);
+    MallocSpyVerifyMemory::FreeContextAndVerify(ctx);
+}

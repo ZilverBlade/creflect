@@ -57,6 +57,7 @@ crf_decorator crf_create_decorator(crf_context ctx, const crf_decorator_create_i
         shcrf_context_set_error(ctx, CRF_EC_ALLOCATION_ERROR);
         return NULL;
     }
+    dbgshcrf_context_mark_allocation(ctx, result, CRF_DATA_TYPE_DECORATOR);
     result->cbStructTotal = 0;
     result->cMemberCount = layout->szMemberLayout ? strlen(layout->szMemberLayout) : 0;
     result->pMemberTypes = NULL;
@@ -148,7 +149,7 @@ crf_decorator crf_create_decorator(crf_context ctx, const crf_decorator_create_i
                 }
             }
             result->pcbMemberSizes[i] = memberSz;
-            result->cbStructTotal += memberSz;
+            result->cbStructTotal = result->pcbMemberOffsets[i] + memberSz;
         }
 
         if (layout->pStructDecorators) {
@@ -173,6 +174,7 @@ fail_return:
 
 void crf_free_decorator(crf_context ctx, crf_decorator decorator) {
     if (!decorator) return;
+    dbgshcrf_context_unmark_allocation(ctx, decorator);
     const crf_allocator_table* allocator = crf_context_get_allocator(ctx);
     if (decorator->pszMemberNames) {
         for (size_t i = 0; i < decorator->cMemberCount; ++i) {

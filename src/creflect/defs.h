@@ -6,6 +6,15 @@
 extern "C" {
 #endif
 
+#if defined(CREFLECT_SHARED_LIB) && defined(_WIN32)
+#ifdef creflect_src
+#define CREFLECT_API __declspec(dllexport)
+#else
+#define CREFLECT_API __declspec(dllimport)
+#endif
+#else
+#define CREFLECT_API 
+#endif
 #define CRF_INVALID_INDEX ((size_t)(SIZE_MAX))
 typedef enum crf_bool {
     CRF_FALSE = 0,
@@ -30,15 +39,20 @@ typedef crf_long crf_int64;
 typedef crf_ulong crf_uint64;
 typedef void* crf_ptr;
 
-#if defined(CREFLECT_SHARED_LIB) && defined(_WIN32)
-#ifdef creflect_src
-#define CREFLECT_API __declspec(dllexport)
-#else
-#define CREFLECT_API __declspec(dllimport)
-#endif
-#else
-#define CREFLECT_API 
-#endif
+typedef enum crf_data_type {
+    CRF_DATA_TYPE_CONTEXT,
+    CRF_DATA_TYPE_DECORATOR,
+    CRF_DATA_TYPE_STRUCT
+} crf_data_type;
+
+static const char* crf_data_type_to_string(crf_data_type eType) {
+    switch (eType) {
+    case CRF_DATA_TYPE_CONTEXT: return "CRF_CONTEXT";
+    case CRF_DATA_TYPE_DECORATOR: return "CRF_DECORATOR";
+    case CRF_DATA_TYPE_STRUCT: return "CRF_STRUCT";
+    default: return "INVALID";
+    }
+}
 
 #ifdef __cplusplus
 }

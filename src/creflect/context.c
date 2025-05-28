@@ -1,24 +1,36 @@
 #include "context.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 
 #include "decorator.h"
 
 static crf_context gContextChain = NULL;
 
-typedef struct crf_reflection_list_entry {
+typedef struct shcrf_ReflectionListEntry {
     const char* szStructName;
     crf_decorator decorator;
-    struct crf_reflection_list_entry* pNext;
-} crf_reflection_list_entry;
+    struct shcrf_ReflectionListEntry* pNext;
+} shcrf_ReflectionListEntry;
+
+#ifndef NDEBUG
+typedef struct dbg_AllocationHandle_t {
+    crf_data_type eType;
+    void* pAllocPtr;
+    dbg_AllocationHandle pNext;
+} *dbg_AllocationHandle;
+#endif
 
 typedef struct crf_context_t {
-    struct crf_reflection_list_entry* pReflectionChain;
+    struct shcrf_ReflectionListEntry* pReflectionChain;
     crf_allocator_table allocator;
     crf_error_code eErrorCode;
 
     crf_context nextContext;
+#ifndef NDEBUG
+    dbg_AllocationHandle managedAllocations;
+#endif
 } crf_context_t;
 
 static void* mallocwrapper(size_t s, void* _) {
@@ -87,3 +99,52 @@ void shcrf_context_set_error(crf_context ctx, crf_error_code ec) {
     assert(ctx);
     ctx->eErrorCode = ec;
 }
+#ifndef NDEBUG
+void dbgshcrf_context_mark_allocation(crf_context ctx, void* pMem, crf_data_type eType) {
+    assert(ctx);
+    dbg_AllocationHandle nextHandle = ctx->allocator.pfnMalloc(sizeof(struct dbg_AllocationHandle_t), ctx->allocator.pUserData);
+    if (!nextHandle) {
+        fprintf(stderr, "Failed to track debug object (failed allocation) %p\n", pMem);
+        return; // failed to verify 
+    }
+    nextHandle->eType = eType;
+    nextHandle->pAllocPtr = pMem;
+    nextHandle->pNext = NULL;
+    if (!ctx->managedAllocations) {
+        ctx->managedAllocations = nextHandle;
+        return;
+    }
+    dbg_AllocationHandle this = ctx->managedAllocations;
+    while (this->pNext != NULL) {
+        this = this->pNext;
+    }
+    this->pNext = nextHandle;
+}
+void dbgshcrf_context_unmark_allocation(crf_context ctx, void* pMem) {
+    assert(ctx);
+    dbg_AllocationHandle this = ctx->managedAllocations;
+    dbg_AllocationHandle prev = NULL;
+    while (this != NULL) {
+        if (this->pAllocPtr == pMem) {
+            if (prev) {
+                prev->pNext = this->pNext;
+            }
+            ctx->allocator.pfnFree(this, ctx->allocator.pUserData);
+            return;
+        }
+        this = this->pNext;
+    }
+    fprintf(stderr, "Allocation %p is not managed by context %p! Aborting...\n", pMem, ctx);
+    assert(0 && "Context does not manage this allocation!");
+}
+void dbgshcrf_context_verify_zeroallocations(crf_context ctx) {
+    dbg_AllocationHandle this = ctx->managedAllocations;
+    if (this) {
+        fprintf(stderr, "Context %p was freed before all resources have been freed! Missing Resources:\n", ctx);
+        while (this != NULL) {
+            fprintf(this->pAllocPtr, "\t%s:%p", crf_data_type_to_string(this->eType), this->pAllocPtr);
+            this = this->pNext;
+        }
+    }
+}
+#endif

@@ -21,6 +21,15 @@ CREFLECT_API crf_error_code crf_context_get_last_error(crf_context ctx);
 
 #ifdef creflect_src
 void shcrf_context_set_error(crf_context ctx, crf_error_code ec);
+#ifndef NDEBUG
+void dbgshcrf_context_mark_allocation(crf_context ctx, void* pMem, crf_data_type eType);
+void dbgshcrf_context_unmark_allocation(crf_context ctx, void* pMem);
+void dbgshcrf_context_verify_zeroallocations(crf_context ctx);
+#else
+#define dbgshcrf_context_mark_allocation(x,y,z)
+#define dbgshcrf_context_unmark_allocation(x,y)
+#define dbgshcrf_context_verify_zeroallocations(x)
+#endif
 #endif
 
 #ifdef __cplusplus

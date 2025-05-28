@@ -151,5 +151,4 @@ TEST(AllocationErrHandler, CreateHashMapOddAllocator) {
     // needs to malloc for BOTH the map and the entries
     crf_fixed_hashmap map = crf_create_fixed_hashmap(&table, 0, [](const void*) {return size_t(); }, [](const void*, const void*) {return int(); });
     EXPECT_NULL(map);
-
 }
