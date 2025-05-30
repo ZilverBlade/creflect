@@ -54,6 +54,7 @@ CREFLECT_API void crf_free_decorator(crf_context ctx, crf_decorator decorator);
 
 CREFLECT_API size_t crf_decorator_get_member_index(const crf_decorator decorator, const char* szMemberName);
 CREFLECT_API size_t crf_decorator_get_member_offset(const crf_decorator decorator, size_t index);
+CREFLECT_API size_t crf_decorator_get_member_size(const crf_decorator decorator, size_t index);
 CREFLECT_API crf_member_type crf_decorator_get_member_type(const crf_decorator decorator, size_t index);
 CREFLECT_API size_t crf_decorator_get_num_members(const crf_decorator decorator);
 CREFLECT_API size_t crf_decorator_get_size(const crf_decorator decorator);

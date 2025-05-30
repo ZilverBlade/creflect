@@ -205,6 +205,11 @@ size_t crf_decorator_get_member_offset(const crf_decorator decorator, size_t ind
     if (index >= decorator->cMemberCount) return CRF_INVALID_INDEX;
     return decorator->pcbMemberOffsets[index];
 }
+size_t crf_decorator_get_member_size(const crf_decorator decorator, size_t index) {
+    assert(decorator && "dont pass empty decorator ");
+    if (index >= decorator->cMemberCount) return CRF_INVALID_INDEX;
+    return decorator->pcbMemberSizes[index];
+}
 crf_member_type crf_decorator_get_member_type(const crf_decorator decorator, size_t index) {
     assert(decorator && "dont pass empty decorator ");
     if (index >= decorator->cMemberCount) return CRF_MEMBER_INVALID;
