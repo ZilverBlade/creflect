@@ -190,6 +190,10 @@ void crf_free_decorator(crf_context ctx, crf_decorator decorator) {
     shcrf_context_set_error(ctx, CRF_EC_SUCCESS);
 }
 
+crf_bool crf_decorator_has_member_names(const crf_decorator decorator) {
+    return decorator->pszMemberNames != NULL;
+}
+
 size_t crf_decorator_get_member_index(const crf_decorator decorator, const char* szMemberName) {
     assert(decorator && "dont pass empty decorator ");
     if (!szMemberName || !decorator->pszMemberNames) return CRF_INVALID_INDEX;

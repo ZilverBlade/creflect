@@ -79,6 +79,37 @@ crf_error_code crf_struct_member_set_value(crf_struct vstruct, size_t index, con
     return CRF_EC_SUCCESS;
 }
 
+
+crf_error_code crf_struct_member_get_value_byname(crf_struct vstruct, const char* szName, void* pOutValue) {
+    assert(vstruct && "dont pass a null struct");
+    if (!crf_decorator_has_member_names(vstruct->decorator)) return CRF_EC_INVALID_STATE;
+    if (!szName) return CRF_EC_INVALID_ARG;
+
+    size_t idx = crf_decorator_get_member_index(vstruct->decorator, szName);
+    if (idx == CRF_INVALID_INDEX) {
+        return CRF_EC_INDEX_OUT_OF_RANGE;
+    }
+    size_t off = crf_decorator_get_member_offset(vstruct->decorator, idx);
+    size_t size = crf_decorator_get_member_size(vstruct->decorator, idx);
+    memcpy(pOutValue, (char*)(vstruct->pData) + off, size);
+    return CRF_EC_SUCCESS;
+}
+
+crf_error_code crf_struct_member_set_value_byname(crf_struct vstruct, const char* szName, const void* pInValue) {
+    assert(vstruct && "dont pass a null struct");
+    if (!crf_decorator_has_member_names(vstruct->decorator)) return CRF_EC_INVALID_STATE;
+    if (!szName) return CRF_EC_INVALID_ARG;
+
+    size_t idx = crf_decorator_get_member_index(vstruct->decorator, szName);
+    if (idx == CRF_INVALID_INDEX) {
+        return CRF_EC_INDEX_OUT_OF_RANGE;
+    }
+    size_t off = crf_decorator_get_member_offset(vstruct->decorator, idx);
+    size_t size = crf_decorator_get_member_size(vstruct->decorator, idx);
+    memcpy((char*)(vstruct->pData) + off, pInValue, size);
+    return CRF_EC_SUCCESS;
+}
+
 void* crf_struct_get_data_ref_ptr(crf_struct vstruct) {
     assert(vstruct && "dont pass a null struct");
     return vstruct->pData;

@@ -17,6 +17,8 @@ CREFLECT_API const crf_decorator crf_struct_get_decorator(crf_struct vstruct);
 
 CREFLECT_API crf_error_code crf_struct_member_get_value(crf_struct vstruct, size_t index, void* pOutValue);
 CREFLECT_API crf_error_code crf_struct_member_set_value(crf_struct vstruct, size_t index, const void* pInValue);
+CREFLECT_API crf_error_code crf_struct_member_get_value_byname(crf_struct vstruct, const char* szName, void* pOutValue);
+CREFLECT_API crf_error_code crf_struct_member_set_value_byname(crf_struct vstruct, const char* szName, const void* pInValue);
 
 CREFLECT_API void* crf_struct_get_data_ref_ptr(crf_struct vstruct);
 
