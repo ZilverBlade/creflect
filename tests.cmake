@@ -8,8 +8,6 @@ file(GLOB_RECURSE ENDF6_SRC
 add_executable("testSuite" ${ENDF6_SRC})
 include(GoogleTest)
 gtest_discover_tests(testSuite)
-add_subdirectory("_deps/rapidcheck")
-target_link_libraries(testSuite rapidcheck rapidcheck_gtest )
 
 # GoogleTest requires at least C++17
 set(CMAKE_CXX_STANDARD 17)
