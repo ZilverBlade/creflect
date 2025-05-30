@@ -13,7 +13,7 @@ crf_struct crf_create_struct(crf_context ctx, const crf_decorator decorator) {
     void* pData = alloc->pfnMalloc(crf_decorator_get_size(decorator), alloc->pUserData);
     if (!pData) {
         shcrf_context_set_error(ctx, CRF_EC_ALLOCATION_ERROR);
-        return;
+        return NULL;
     }
     crf_struct strc = crf_wrap_struct(ctx, decorator, pData);
     strc->bCtxOwnsData = CRF_TRUE;
@@ -25,13 +25,13 @@ crf_struct crf_wrap_struct(crf_context ctx, const crf_decorator decorator, void*
     assert(ctx);
     if (!decorator) {
         shcrf_context_set_error(ctx, CRF_EC_INVALID_ARG);
-        return;
+        return NULL;
     }
     const crf_allocator_table* alloc = crf_context_get_allocator(ctx);
     crf_struct strc = alloc->pfnMalloc(sizeof(crf_struct_t), alloc->pUserData);
     if (!strc) {
         shcrf_context_set_error(ctx, CRF_EC_ALLOCATION_ERROR);
-        return;
+        return NULL;
     }
     dbgshcrf_context_mark_allocation(ctx, strc, CRF_DATA_TYPE_STRUCT);
     strc->bCtxOwnsData = CRF_FALSE;

@@ -103,12 +103,12 @@ crf_decorator crf_create_decorator(crf_context ctx, const crf_decorator_create_i
                 }
             }
 
-            result->pszMemberNames = (const char**)allocator->pfnMalloc(result->cMemberCount * sizeof(const char*), allocator->pUserData);
+            result->pszMemberNames = (char**)allocator->pfnMalloc(result->cMemberCount * sizeof(char*), allocator->pUserData);
             if (!result->pszMemberNames) {
                 ec = CRF_EC_ALLOCATION_ERROR;
                 goto fail_return;
             }
-            memset(result->pszMemberNames, 0, result->cMemberCount * sizeof(const char*));
+            memset(result->pszMemberNames, 0, result->cMemberCount * sizeof(char*));
 
             for (size_t i = 0; i < result->cMemberCount; ++i) {
                 size_t clearSize = strlen(layout->pszMemberNames[i]) + 1;
